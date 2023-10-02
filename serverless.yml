@@ -1,0 +1,42 @@
+service: test
+
+provider:
+  name: aws
+  runtime: java17
+  stage: dev
+  region: eu-central-1
+
+functions:
+  createUser:
+    handler: erdison.dosti.test.handler.CreateUserHandler::handleRequest
+    events:
+      - http:
+          path: users
+          method: post
+          cors: true
+  getUserById:
+    handler: erdison.dosti.test.handler.GetUserByIdHandler::handleRequest
+    events:
+      - http:
+          path: users/{userId}
+          method: get
+          cors: true
+
+custom:
+  dynamodbTableName: test-users
+
+resources:
+  Resources:
+    UserDynamoDBTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.dynamodbTableName}
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 10
+          WriteCapacityUnits: 10
