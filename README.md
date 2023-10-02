@@ -1,3 +1,2 @@
-# AWS-Lamdba
-# AWS-Lamdba
-# AWS-Lamdba
+serveless deploy 
+change thevale in application.properties
